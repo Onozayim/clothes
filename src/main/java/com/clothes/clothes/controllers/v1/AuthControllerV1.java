@@ -19,12 +19,14 @@ import com.clothes.clothes.services.AuthenticationService;
 import com.clothes.clothes.services.JwtService;
 import com.clothes.clothes.vars.JsonResponses;
 
+import jakarta.validation.Valid;
+
 @RequestMapping("v1/auth")
 @RestController
 public class AuthControllerV1 {
     @Autowired
     JwtService jwtService;
-    
+
     @Autowired
     AuthenticationService authenticationService;
 
@@ -32,14 +34,14 @@ public class AuthControllerV1 {
     JsonResponses jsonResponses;
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDto registerUserDto) {
         User registeredUser = authenticationService.signup(registerUserDto);
 
-        return ResponseEntity.ok(registeredUser);
+        return jsonResponses.ReturnOkData(registeredUser, "Usuario creado");
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> authenticate(@RequestBody AuthDTO AuthDTO) {
+    public ResponseEntity<?> authenticate(@Valid @RequestBody AuthDTO AuthDTO) {
         User authenticatedUser = authenticationService.authenticate(AuthDTO);
 
         Map<String, Object> extraClaims = new HashMap<>();
@@ -47,8 +49,8 @@ public class AuthControllerV1 {
         extraClaims.put("email", authenticatedUser.getEmail());
 
         return jsonResponses.ReturnOkData(
-            new LoginResponse(jwtService.generateToken(extraClaims, authenticatedUser), jwtService.getExpirationTime()),
-            "Ususario logeado"
-        );
+                new LoginResponse(jwtService.generateToken(extraClaims, authenticatedUser),
+                        jwtService.getExpirationTime()),
+                "Ususario logeado");
     }
 }

@@ -1,0 +1,57 @@
+package com.clothes.clothes.controllers.v1;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.clothes.clothes.annotations.ValidId;
+import com.clothes.clothes.entities.User;
+import com.clothes.clothes.responses.UserResponse;
+import com.clothes.clothes.services.AuthenticationService;
+import com.clothes.clothes.services.JwtService;
+import com.clothes.clothes.services.UserService;
+import com.clothes.clothes.utils.AuthUtils;
+import com.clothes.clothes.vars.JsonResponses;
+import com.clothes.clothes.vars.StringConsts;
+
+@RestController
+@RequestMapping(path = "v1/user")
+public class UserControllerV1 {
+    @Autowired
+    UserService userService;
+    @Autowired
+    AuthenticationService authenticationService;
+    @Autowired
+    JwtService jwtService;
+    @Autowired
+    JsonResponses jsonResponses;
+
+    // @PreAuthorize("hasAuthority('USER')")
+    @GetMapping(value = "/me")
+    public ResponseEntity<?> getME() {
+        return jsonResponses.ReturnOkData(new UserResponse(AuthUtils.getUserAuthenticated()), StringConsts.Done);
+    }
+
+    // @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping(value = { "/delete/", "/delete/{id}" }, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteUser(
+            @PathVariable("id") @ValidId String id) {
+
+        Optional<User> user = userService.findUserById(Long.valueOf(id));
+
+        if(!user.isPresent())
+            throw new NoSuchElementException("Usuario no encontrado");
+
+        userService.deleteUserById(Long.valueOf(id));
+        return jsonResponses.ReturnOkMessage("Usuario eliminado");
+    }
+}
