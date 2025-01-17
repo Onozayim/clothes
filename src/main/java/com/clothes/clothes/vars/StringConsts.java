@@ -9,4 +9,5 @@ public class StringConsts {
     public static String Expecion = new String("Hubo un error inesperado en el server");
     public static String JwtExpired = new String("Token expirado");
     public static String JwtNotValid = new String("Token no valido");
+    public static String ImagePath = new String("src/main/resources/static/public/");
 }

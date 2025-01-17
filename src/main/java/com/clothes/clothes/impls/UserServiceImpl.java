@@ -1,5 +1,6 @@
 package com.clothes.clothes.impls;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findUserById(Long id) {
         return uRepository.findById(id);
+    }
+
+    @Override
+    public User findUserByIdOrThrow(Long id) {
+        return uRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
     }
 }
