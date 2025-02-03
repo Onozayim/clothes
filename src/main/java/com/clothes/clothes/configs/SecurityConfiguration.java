@@ -36,6 +36,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/v1/auth/**").permitAll())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/v1/user/**").authenticated())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/v1/clothe/**").authenticated())
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/v1/cart/**").authenticated())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

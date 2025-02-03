@@ -42,6 +42,9 @@ public class Clothe {
     @Column(nullable = false, length = 100, unique = false)
     private String image;
 
+    @Column(nullable = false)
+    private float price;
+
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
     private Date createdAt;
