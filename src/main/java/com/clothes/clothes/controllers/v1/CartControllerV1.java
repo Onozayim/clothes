@@ -15,7 +15,10 @@ import com.clothes.clothes.utils.AuthUtils;
 import com.clothes.clothes.vars.JsonResponses;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -26,7 +29,7 @@ public class CartControllerV1 {
     CartRepository cartRepository;
 
     @Autowired
-    JsonResponses jsonResponses;    
+    JsonResponses jsonResponses;
 
     @Autowired
     CartService cartService;
@@ -42,4 +45,12 @@ public class CartControllerV1 {
         return jsonResponses.ReturnOkData(cartDTO, "Added to Cart");
     }
 
+    @DeleteMapping(value = { "/", "/{id}" }, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteCltohe(
+            @PathVariable("id") @NotEmpty(message = "Porfavor ingrese un id") String id) {
+
+        cartRepository.deleteById(Long.valueOf(id));
+
+        return jsonResponses.ReturnOkMessage("Prenda eliminada");
+    }
 }

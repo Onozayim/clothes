@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.clothes.clothes.dtos.CartDTO;
 import com.clothes.clothes.dtos.StockDTO;
+import com.clothes.clothes.dtos.UpdateCartDTO;
 import com.clothes.clothes.entities.Cart;
 import com.clothes.clothes.entities.Clothe;
 import com.clothes.clothes.entities.Stock;
@@ -54,5 +55,32 @@ public class CartServiceImpl implements CartService {
         cart.setStockId(stock);
 
         cartRepository.save(cart);
+    }
+
+    public Cart updateCart(UpdateCartDTO updateCartDTO, User user) throws ConditionalException {
+        Cart cart = cartRepository.findById(updateCartDTO.getId())
+                .orElseThrow(() -> new NoSuchElementException("Carrito no encontrado"));
+
+        if(cart.getUser().getId() != user.getId())
+            throw new ConditionalException("Usuario no valido");
+
+
+        Stock stock = stockRepository.findById(updateCartDTO.getStock_id())
+                .orElseThrow(() -> new NoSuchElementException("Prenda no encontrada"));
+        
+        Short newStock = (short)(cart.getStock() + stock.getStock());
+
+        if (updateCartDTO.getStock() > newStock)
+            throw new ConditionalException("Stock insuficiente");
+
+
+        cart.setStock(updateCartDTO.getStock());
+        cart.setTotalPrice(cart.getPrice() * updateCartDTO.getStock());
+        cartRepository.save(cart);
+
+        stock.setStock((short)(newStock - updateCartDTO.getStock()));
+        stockRepository.save(stock);
+
+        return cart;
     }
 }
