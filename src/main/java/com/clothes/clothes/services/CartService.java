@@ -7,6 +7,7 @@ import com.clothes.clothes.entities.User;
 import com.clothes.clothes.exceptions.ConditionalException;
 
 public interface CartService {
-    public void addToCart(CartDTO cartDTO, User user) throws ConditionalException;
+    public Cart addToCart(CartDTO cartDTO, User user) throws ConditionalException;
     public Cart updateCart(UpdateCartDTO updateCartDTO, User user) throws ConditionalException;
+    public void removeClotheFromCart(Long id, User user) throws ConditionalException; 
 }

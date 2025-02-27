@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.clothes.clothes.dtos.CartDTO;
+import com.clothes.clothes.dtos.UpdateCartDTO;
+import com.clothes.clothes.entities.Cart;
 import com.clothes.clothes.exceptions.ConditionalException;
 import com.clothes.clothes.repositories.CartRepository;
 import com.clothes.clothes.services.AuthenticationService;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping(path = "v1/cart")
@@ -37,20 +40,29 @@ public class CartControllerV1 {
     @Autowired
     AuthenticationService authenticationService;
 
-    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = { "/",
+            "" }, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addToCart(@Valid @RequestBody CartDTO cartDTO) throws ConditionalException {
 
-        cartService.addToCart(cartDTO, AuthUtils.getUserAuthenticated());
+        Cart cart = cartService.addToCart(cartDTO, AuthUtils.getUserAuthenticated());
 
-        return jsonResponses.ReturnOkData(cartDTO, "Added to Cart");
+        return jsonResponses.ReturnOkData(new CartDTO(cart), "Added to Cart");
     }
 
-    @DeleteMapping(value = { "/", "/{id}" }, produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = { "/", "/{id}", "" }, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteCltohe(
-            @PathVariable("id") @NotEmpty(message = "Porfavor ingrese un id") String id) {
+            @PathVariable("id") @NotEmpty(message = "Porfavor ingrese un id") String id) throws ConditionalException {
 
-        cartRepository.deleteById(Long.valueOf(id));
+        cartService.removeClotheFromCart(Long.valueOf(id), AuthUtils.getUserAuthenticated());
 
         return jsonResponses.ReturnOkMessage("Prenda eliminada");
+    }
+
+    @PutMapping(value = { "/",
+            "" }, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateClothe(@Valid @RequestBody UpdateCartDTO updateCart) throws ConditionalException {
+
+        Cart cart = cartService.updateCart(updateCart, AuthUtils.getUserAuthenticated());
+        return jsonResponses.ReturnOkData(new CartDTO(cart), null);
     }
 }

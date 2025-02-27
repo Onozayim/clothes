@@ -34,7 +34,7 @@ public class CartServiceImpl implements CartService {
     @Autowired
     StockService stockService;
 
-    public void addToCart(CartDTO cartDTO, User user) throws ConditionalException {
+    public Cart addToCart(CartDTO cartDTO, User user) throws ConditionalException {
         Stock stock = stockRepository.findById(cartDTO.getStock_id())
                 .orElseThrow(() -> new NoSuchElementException("Prenda no encontrada"));
 
@@ -55,6 +55,8 @@ public class CartServiceImpl implements CartService {
         cart.setStockId(stock);
 
         cartRepository.save(cart);
+
+        return cart;
     }
 
     public Cart updateCart(UpdateCartDTO updateCartDTO, User user) throws ConditionalException {
@@ -65,7 +67,7 @@ public class CartServiceImpl implements CartService {
             throw new ConditionalException("Usuario no valido");
 
 
-        Stock stock = stockRepository.findById(updateCartDTO.getStock_id())
+        Stock stock = stockRepository.findById(cart.getStockId().getId())
                 .orElseThrow(() -> new NoSuchElementException("Prenda no encontrada"));
         
         Short newStock = (short)(cart.getStock() + stock.getStock());
@@ -82,5 +84,23 @@ public class CartServiceImpl implements CartService {
         stockRepository.save(stock);
 
         return cart;
+    }
+
+
+    public void removeClotheFromCart(Long id, User user) throws ConditionalException {
+        Cart cart = cartRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Carrito no encontrado"));
+
+        if(cart.getUser().getId() != user.getId())
+            throw new ConditionalException("Usuario no valido");
+
+
+        Stock stock = stockRepository.findById(cart.getStockId().getId())
+                .orElseThrow(() -> new NoSuchElementException("Prenda no encontrada"));
+        
+        stock.setStock((short)(stock.getStock() + cart.getStock()));
+
+        stockRepository.save(stock);
+        cartRepository.deleteById(id);
     }
 }

@@ -63,6 +63,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoResourceFoundException.class)
     protected ResponseEntity<?> notFound(NoResourceFoundException ex, HttpServletRequest request) {
+        System.out.println(ex.getMessage());
         return jsonResponses.ReturnErrorMessage(
                 "Recurso no encontrado",
                 HttpStatus.NOT_FOUND);
