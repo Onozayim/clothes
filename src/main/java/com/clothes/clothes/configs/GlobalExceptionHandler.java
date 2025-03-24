@@ -162,6 +162,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(io.jsonwebtoken.security.SignatureException.class)
     protected ResponseEntity<?> noSuchElement(io.jsonwebtoken.security.SignatureException ex,
             HttpServletRequest request) {
+                System.out.println(ex.getMessage());
         return this.jsonResponses.ReturnErrorMessage(
                 "JWT no valido",
                 HttpStatus.NOT_FOUND);

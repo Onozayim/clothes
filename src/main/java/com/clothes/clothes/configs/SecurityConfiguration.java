@@ -30,6 +30,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/v1/auth/**").permitAll())
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/v1/public/**").permitAll())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/v1/user/**").authenticated())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/v1/clothe/**").authenticated())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/v1/cart/**").authenticated())

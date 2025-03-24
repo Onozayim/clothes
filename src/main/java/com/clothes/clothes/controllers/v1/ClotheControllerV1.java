@@ -92,7 +92,7 @@ public class ClotheControllerV1 {
                 clotheService.findClotheOrThrow(Long.valueOf(id))), "Prenda encontrada");
     }
 
-    @GetMapping(value = { "/", "" }, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = { "/public/", "/public" }, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getClothes(@RequestParam(defaultValue = "0") int page) {
 
         Pageable pageable = PageRequest.of(page, 6, Sort.by("id").ascending());
