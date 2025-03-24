@@ -53,6 +53,6 @@ public class Clothe {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Stock.class, mappedBy = "clothe")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Stock.class, mappedBy = "clothe")
     private List<Stock> stock = new ArrayList<>();
 }

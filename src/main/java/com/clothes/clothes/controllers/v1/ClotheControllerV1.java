@@ -1,6 +1,7 @@
 package com.clothes.clothes.controllers.v1;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.clothes.clothes.dtos.ClotheDTO;
@@ -25,6 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -86,6 +90,13 @@ public class ClotheControllerV1 {
 
         return jsonResponses.ReturnOkData(new ClotheRelationsResponse(
                 clotheService.findClotheOrThrow(Long.valueOf(id))), "Prenda encontrada");
+    }
+
+    @GetMapping(value = { "/", "" }, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getClothes(@RequestParam(defaultValue = "0") int page) {
+
+        Pageable pageable = PageRequest.of(page, 6, Sort.by("id").ascending());
+        return jsonResponses.ReturnOkData(clotheService.getPage(pageable), "Prendas encontradas");
     }
 
     @PutMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

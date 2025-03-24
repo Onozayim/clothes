@@ -8,12 +8,15 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.clothes.clothes.dtos.ClotheDTO;
 import com.clothes.clothes.dtos.UpdateClotheDTO;
 import com.clothes.clothes.entities.Clothe;
 import com.clothes.clothes.repositories.ClotheRepository;
+import com.clothes.clothes.responses.CltoheResponse;
 import com.clothes.clothes.services.ClotheService;
 import com.clothes.clothes.vars.StringConsts;
 
@@ -73,5 +76,9 @@ public class ClotheServiceImpl implements ClotheService {
 
     public Clothe findClotheOrThrow(Long id) {
         return clotheRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Prenda no encontrada"));
+    }
+
+    public Page<CltoheResponse> getPage(Pageable pageable) {
+        return clotheRepository.findAllClothesWithoutStock(pageable);
     }
 }
