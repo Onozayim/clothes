@@ -15,4 +15,5 @@ public interface ClotheService {
     public Clothe updateClothe(UpdateClotheDTO clothe) throws IOException;
     public Clothe findClotheOrThrow(Long id);
     public Page<CltoheResponse> getPage(Pageable pageable);
+    public byte[] getImageFromId(String id) throws IOException;
 }

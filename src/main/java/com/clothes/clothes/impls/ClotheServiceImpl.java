@@ -1,5 +1,6 @@
 package com.clothes.clothes.impls;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -80,5 +81,17 @@ public class ClotheServiceImpl implements ClotheService {
 
     public Page<CltoheResponse> getPage(Pageable pageable) {
         return clotheRepository.findAllClothesWithoutStock(pageable);
+    }
+
+    public byte[] getImageFromId(String id) throws IOException {
+        Clothe clothe = clotheRepository.findById(Long.valueOf(id)).orElseThrow();
+
+        String filepath = clothe.getImage();
+
+        System.out.println(filepath);
+
+        byte[] image = Files.readAllBytes(new File(filepath).toPath());
+
+        return image;
     }
 }

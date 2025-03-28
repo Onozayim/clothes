@@ -121,5 +121,4 @@ public class ClotheControllerV1 {
 
         return jsonResponses.ReturnOkMessage("Prenda eliminada");
     }
-
 }
