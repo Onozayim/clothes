@@ -20,6 +20,7 @@ public class CltoheResponse {
         this.created_at = clothe.getCreatedAt();
         this.updated_at = clothe.getUpdatedAt();
         this.price = clothe.getPrice();
+        this.id = clothe.getId();
     }
 
     private String title;   
@@ -28,4 +29,5 @@ public class CltoheResponse {
     private Date created_at;
     private Date updated_at;
     private float price;
+    private Long id;
 }

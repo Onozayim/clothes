@@ -1,6 +1,8 @@
 package com.clothes.clothes.configs;
 
 import java.security.SignatureException;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +33,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Data;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -76,13 +79,24 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(SQLException.class)
+    protected ResponseEntity<?> sqlException(SQLException ex, HttpServletRequest request) {
+        System.out.println("EXCEPCION SQL");
+        System.out.println(ex.getMessage());
+
+        return this.jsonResponses.ReturnErrorMessage(
+                StringConsts.Expecion,
+                HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     protected ResponseEntity<?> sqlException(DataIntegrityViolationException ex, HttpServletRequest request) {
         System.out.println("EXCEPCION SQL");
         System.out.println(ex.getMessage());
 
         return this.jsonResponses.ReturnErrorMessage(
-                StringConsts.Expecion,
+                ex.getMessage(),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -162,7 +176,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(io.jsonwebtoken.security.SignatureException.class)
     protected ResponseEntity<?> noSuchElement(io.jsonwebtoken.security.SignatureException ex,
             HttpServletRequest request) {
-                System.out.println(ex.getMessage());
+        System.out.println(ex.getMessage());
         return this.jsonResponses.ReturnErrorMessage(
                 "JWT no valido",
                 HttpStatus.NOT_FOUND);

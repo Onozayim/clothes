@@ -37,7 +37,14 @@ public class AuthControllerV1 {
     public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDto registerUserDto) {
         User registeredUser = authenticationService.signup(registerUserDto);
 
-        return jsonResponses.ReturnOkData(registeredUser, "Usuario creado");
+        Map<String, Object> extraClaims = new HashMap<>();
+
+        extraClaims.put("email", registeredUser.getEmail());
+
+        return jsonResponses.ReturnOkData(
+                new LoginResponse(jwtService.generateToken(extraClaims, registeredUser),
+                        jwtService.getExpirationTime()),
+                "Ususario logeado");
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
