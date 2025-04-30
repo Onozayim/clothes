@@ -1,5 +1,6 @@
 package com.clothes.clothes.impls;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import com.clothes.clothes.exceptions.ConditionalException;
 import com.clothes.clothes.repositories.CartRepository;
 import com.clothes.clothes.repositories.ClotheRepository;
 import com.clothes.clothes.repositories.StockRepository;
+import com.clothes.clothes.responses.CartResponse;
 import com.clothes.clothes.services.CartService;
 import com.clothes.clothes.services.StockService;
 
@@ -103,4 +105,8 @@ public class CartServiceImpl implements CartService {
         stockRepository.save(stock);
         cartRepository.deleteById(id);
     }
+
+    public List<CartResponse> getUserCart(User user) {
+        return cartRepository.getUserCartResponse(user.getId());
+    } 
 }

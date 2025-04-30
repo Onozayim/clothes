@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CltoheResponse {
+public class ClotheResponse {
 
-    public CltoheResponse(Clothe clothe) {
+    public ClotheResponse(Clothe clothe) {
         this.description = clothe.getDescription();
         this.title = clothe.getTitle();
         this.image = clothe.getImage();

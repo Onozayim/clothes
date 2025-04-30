@@ -19,6 +19,8 @@ public class ClotheRelationsResponse {
         this.title = clothe.getTitle();
         this.description = clothe.getDescription();
         this.stocks = stocks;
+        this.image = clothe.getImage();
+        this.id = clothe.getId();
     }
 
     public ClotheRelationsResponse(Clothe clothe) {
@@ -32,6 +34,8 @@ public class ClotheRelationsResponse {
         }
         
         this.stocks = stocks;
+        this.image = clothe.getImage();
+        this.id = clothe.getId();
     }
 
     private String title;   
@@ -39,4 +43,8 @@ public class ClotheRelationsResponse {
     private String description;
 
     private List<StockResponse> stocks;
+
+    private Long id;
+
+    private String image;
 }

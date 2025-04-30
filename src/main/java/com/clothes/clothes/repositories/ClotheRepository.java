@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.clothes.clothes.entities.Clothe;
-import com.clothes.clothes.responses.CltoheResponse;
+import com.clothes.clothes.responses.ClotheResponse;
 
 @Repository
-public interface ClotheRepository extends JpaRepository<Clothe, Long>{
-    @Query("SELECT new com.clothes.clothes.responses.CltoheResponse(c) From Clothe c")
-    Page<CltoheResponse> findAllClothesWithoutStock(Pageable pageable);
+public interface ClotheRepository extends JpaRepository<Clothe, Long> {
+    @Query(value = "SELECT new com.clothes.clothes.responses.ClotheResponse(c) From Clothe c", nativeQuery = true)
+    Page<ClotheResponse> findAllClothesWithoutStock(Pageable pageable);
 
 }

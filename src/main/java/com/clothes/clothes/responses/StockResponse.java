@@ -14,9 +14,12 @@ public class StockResponse {
     public StockResponse(Stock stock) {
         this.stock = stock.getStock();
         this.size = stock.getSize();
+        this.id = stock.getId();
     }
 
     private Short stock;   
 
     private String size;
+
+    private Long id;
 }

@@ -17,7 +17,7 @@ import com.clothes.clothes.dtos.ClotheDTO;
 import com.clothes.clothes.dtos.UpdateClotheDTO;
 import com.clothes.clothes.entities.Clothe;
 import com.clothes.clothes.repositories.ClotheRepository;
-import com.clothes.clothes.responses.CltoheResponse;
+import com.clothes.clothes.responses.ClotheResponse;
 import com.clothes.clothes.services.ClotheService;
 import com.clothes.clothes.vars.StringConsts;
 
@@ -79,7 +79,7 @@ public class ClotheServiceImpl implements ClotheService {
         return clotheRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Prenda no encontrada"));
     }
 
-    public Page<CltoheResponse> getPage(Pageable pageable) {
+    public Page<ClotheResponse> getPage(Pageable pageable) {
         return clotheRepository.findAllClothesWithoutStock(pageable);
     }
 

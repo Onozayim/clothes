@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.clothes.clothes.dtos.CartDTO;
 import com.clothes.clothes.dtos.UpdateCartDTO;
 import com.clothes.clothes.entities.Cart;
+import com.clothes.clothes.entities.User;
 import com.clothes.clothes.exceptions.ConditionalException;
 import com.clothes.clothes.repositories.CartRepository;
 import com.clothes.clothes.services.AuthenticationService;
@@ -22,6 +23,7 @@ import jakarta.validation.constraints.NotEmpty;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -47,6 +49,15 @@ public class CartControllerV1 {
         Cart cart = cartService.addToCart(cartDTO, AuthUtils.getUserAuthenticated());
 
         return jsonResponses.ReturnOkData(new CartDTO(cart), "Added to Cart");
+    }
+
+    @GetMapping(value = { "/",
+            "" }, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getCartInfo() throws ConditionalException {
+
+        User user = AuthUtils.getUserAuthenticated();
+
+        return jsonResponses.ReturnOkData(cartService.getUserCart(user), "Added to Cart");
     }
 
     @DeleteMapping(value = { "/", "/{id}", "" }, produces = MediaType.APPLICATION_JSON_VALUE)

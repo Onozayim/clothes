@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.clothes.clothes.responses.ClotheRelationsResponse;
 import com.clothes.clothes.services.ClotheService;
 import com.clothes.clothes.vars.JsonResponses;
 
@@ -39,11 +40,18 @@ public class PublicClotheControllerV1 {
     }
 
     @GetMapping(value = { "/image/{id}/", "image/{id}" })
-    public ResponseEntity<?> getMethodName(@PathVariable("id") @NotEmpty(message = "Porfavor ingrese un id") String id)
+    public ResponseEntity<?> getClotheImage(@PathVariable("id") @NotEmpty(message = "Porfavor ingrese un id") String id)
             throws IOException {
 
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png"))
                 .body(clotheService.getImageFromId(id));
     }
 
+    @GetMapping(value = { "/", "/{id}" }, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getClothe(
+            @PathVariable("id") @NotEmpty(message = "Porfavor ingrese un id") String id) {
+
+        return jsonResponses.ReturnOkData(new ClotheRelationsResponse(
+                clotheService.findClotheOrThrow(Long.valueOf(id))), "Prenda encontrada");
+    }
 }

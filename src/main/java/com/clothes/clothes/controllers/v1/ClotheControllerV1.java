@@ -12,7 +12,7 @@ import com.clothes.clothes.entities.Stock;
 import com.clothes.clothes.repositories.ClotheRepository;
 import com.clothes.clothes.repositories.StockRepository;
 import com.clothes.clothes.responses.ClotheRelationsResponse;
-import com.clothes.clothes.responses.CltoheResponse;
+import com.clothes.clothes.responses.ClotheResponse;
 import com.clothes.clothes.responses.StockResponse;
 import com.clothes.clothes.services.ClotheService;
 import com.clothes.clothes.services.StockService;
@@ -102,7 +102,7 @@ public class ClotheControllerV1 {
     @PutMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateClothe(@Valid @ModelAttribute UpdateClotheDTO clotheDTO) throws IOException {
 
-        return jsonResponses.ReturnOkData(new CltoheResponse(clotheService.updateClothe(clotheDTO)),
+        return jsonResponses.ReturnOkData(new ClotheResponse(clotheService.updateClothe(clotheDTO)),
                 "Ropa actualizada");
     }
 
