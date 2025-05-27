@@ -16,6 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping(path = "v1/oc")
@@ -33,6 +35,11 @@ public class OcControllerV1 {
     public ResponseEntity<?> saveOc() {
         Oc oc = oService.saveOc(AuthUtils.getUserAuthenticated());
         return jsonResponses.ReturnOkData(new OcRelationsResponse(oc), "Oc creada");
+    }
+
+    @GetMapping(value = { "", "/" }, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getOcWithDetails() {
+        return jsonResponses.ReturnOkData(oService.getUserOcs(AuthUtils.getUserAuthenticated()), "Ocs");
     }
 
 }

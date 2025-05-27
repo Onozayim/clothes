@@ -26,7 +26,7 @@ public class OcDetalleResponse {
         this.setUpdatedAt(ocDetalle.getUpdatedAt());
         // this.setUser(new UserResponse(ocDetalle.getUser()));
         // this.setStockId(new StockResponse(ocDetalle.getStockId()));
-        // this.setCltoheResponse(new CltoheResponse(ocDetalle.getClothe()));
+        this.setCltoheResponse(new ClotheResponse(ocDetalle.getClothe()));
         // this.setOc(new OcResponse(ocDetalle.getOc()));
     }
     
@@ -38,6 +38,6 @@ public class OcDetalleResponse {
     private Date updatedAt;
     // private UserResponse user;
     // private StockResponse stockId;
-    // private CltoheResponse cltoheResponse;
+    private ClotheResponse cltoheResponse;
     // private OcResponse oc;
 }

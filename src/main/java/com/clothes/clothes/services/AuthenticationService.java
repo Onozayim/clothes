@@ -28,6 +28,7 @@ public class AuthenticationService {
             user.setFullName(input.getFullName());
             user.setEmail(input.getEmail());
             user.setPassword(passwordEncoder.encode(input.getPassword()));
+            user.setPhoneNumber(input.getPhoneNumber());
             return userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Correo ya utilizado");

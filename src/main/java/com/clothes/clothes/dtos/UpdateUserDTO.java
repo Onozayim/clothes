@@ -1,7 +1,6 @@
 package com.clothes.clothes.dtos;
 
-import com.clothes.clothes.annotations.PasswordMatching;
-import com.clothes.clothes.annotations.StrongPassword;
+import com.clothes.clothes.annotations.PhoneNumber;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -13,12 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@PasswordMatching(
-    password = "password",
-    confirmPassword = "confirmPassword",
-    message = "Las contraseñas deben coincidir"
-)
-public class RegisterUserDto {
+public class UpdateUserDTO {
     @Size(min = 0, max = 50, message = "El nombre de usuario tiene un límite de 50 caracteres")
     @NotBlank(message = "El nombre de usuario es necesario")
     private String fullName;
@@ -28,16 +22,8 @@ public class RegisterUserDto {
     @Email(message = "El correo es invalido")
     private String email;
 
-    @Size(min = 0, max = 13, message = "El número teléfonico no puede tener más de 10 digitos")
+    @Size(min = 0, max = 15, message = "El número teléfonico no puede tener más de 10 digitos")
     @NotBlank(message = "El número telefonico es necesario")
+    @PhoneNumber
     private String phoneNumber;
-
-    @Size(min = 0, max = 75, message = "La contraseña tiene un límite de 75 caracteres")
-    @NotBlank(message = "La contraseña es necesaria")
-    @StrongPassword
-    private String password;
-
-    @Size(min = 0, max = 75, message = "La contraseña tiene un límite de 75 caracteres")
-    @NotBlank(message = "Favor de confirmar la contraseña")
-    private String confirmPassword;
 }

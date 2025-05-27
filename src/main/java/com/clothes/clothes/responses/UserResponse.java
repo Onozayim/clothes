@@ -19,11 +19,13 @@ public class UserResponse {
         this.id = user.getId();
         this.username = user.getUsername();
         this.email = user.getEmail();
+        this.phoneNumber = user.getPhoneNumber();
         this.authorities = user.getAuthorities();
     }
 
     private Long id;
     private String username;
     private String email;
+    private String phoneNumber;
     Collection<? extends GrantedAuthority> authorities;
 }

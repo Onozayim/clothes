@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.clothes.clothes.dtos.UpdateUserDTO;
 import com.clothes.clothes.entities.User;
 import com.clothes.clothes.repositories.UserRepository;
 import com.clothes.clothes.services.UserService;
@@ -33,5 +34,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByIdOrThrow(Long id) {
         return uRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
+    }
+
+    @Override
+    public User updateUser(UpdateUserDTO userDto, User user) {
+
+        user.setEmail(userDto.getEmail());
+        user.setFullName(userDto.getFullName());
+        user.setPhoneNumber(userDto.getPhoneNumber());
+        uRepository.save(user);
+
+        return user;
     }
 }

@@ -14,6 +14,7 @@ import com.clothes.clothes.entities.User;
 import com.clothes.clothes.repositories.CartRepository;
 import com.clothes.clothes.repositories.OcDetalleRepository;
 import com.clothes.clothes.repositories.OcRepository;
+import com.clothes.clothes.responses.OcWithDetailsResponse;
 import com.clothes.clothes.services.OcService;
 
 @Service
@@ -54,10 +55,13 @@ public class OcServiceImpl implements OcService{
             details.add(ocDetalle);
         }
 
-        oc.setOcDetalles(details);
+        // oc.setOcDetalles(details);
 
         cartRepository.deleteByUser(user);
 
         return oc;
+    }
+    public List<OcWithDetailsResponse> getUserOcs(User user) {
+        return ocRepository.getUserOcs(user.getId());
     }
 }

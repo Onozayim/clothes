@@ -11,7 +11,7 @@ import com.clothes.clothes.responses.ClotheResponse;
 
 @Repository
 public interface ClotheRepository extends JpaRepository<Clothe, Long> {
-    @Query(value = "SELECT new com.clothes.clothes.responses.ClotheResponse(c) From Clothe c", nativeQuery = true)
+    @Query(value = "SELECT new com.clothes.clothes.responses.ClotheResponse(c) From Clothe c", nativeQuery = false)
     Page<ClotheResponse> findAllClothesWithoutStock(Pageable pageable);
 
 }

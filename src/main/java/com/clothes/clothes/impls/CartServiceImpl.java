@@ -37,6 +37,9 @@ public class CartServiceImpl implements CartService {
     StockService stockService;
 
     public Cart addToCart(CartDTO cartDTO, User user) throws ConditionalException {
+        if (cartDTO.getStock() == 0)
+            throw new ConditionalException("Stock no valido");
+
         Stock stock = stockRepository.findById(cartDTO.getStock_id())
                 .orElseThrow(() -> new NoSuchElementException("Prenda no encontrada"));
 
@@ -62,6 +65,9 @@ public class CartServiceImpl implements CartService {
     }
 
     public Cart updateCart(UpdateCartDTO updateCartDTO, User user) throws ConditionalException {
+        if (updateCartDTO.getStock() == 0)
+            throw new ConditionalException("Stock no valido");
+
         Cart cart = cartRepository.findById(updateCartDTO.getId())
                 .orElseThrow(() -> new NoSuchElementException("Carrito no encontrado"));
 
@@ -76,7 +82,6 @@ public class CartServiceImpl implements CartService {
 
         if (updateCartDTO.getStock() > newStock)
             throw new ConditionalException("Stock insuficiente");
-
 
         cart.setStock(updateCartDTO.getStock());
         cart.setTotalPrice(cart.getPrice() * updateCartDTO.getStock());
