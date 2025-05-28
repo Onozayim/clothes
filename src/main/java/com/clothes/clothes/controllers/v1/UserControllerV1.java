@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.clothes.clothes.annotations.ValidId;
 import com.clothes.clothes.dtos.UpdateUserDTO;
+import com.clothes.clothes.email.EmailDetails;
+import com.clothes.clothes.email.EmailService;
 import com.clothes.clothes.responses.UserResponse;
 import com.clothes.clothes.services.AuthenticationService;
 import com.clothes.clothes.services.JwtService;
@@ -35,9 +37,19 @@ public class UserControllerV1 {
     @Autowired
     JsonResponses jsonResponses;
 
+    @Autowired
+    EmailService emailService;
+
     // @PreAuthorize("hasAuthority('USER')")
     @GetMapping(value = "/me")
     public ResponseEntity<?> getME() {
+        EmailDetails emailDetails = new EmailDetails();
+        
+        emailDetails.setMsgBody("TEST");
+        emailDetails.setRecipient("camilomdo@gmail.com");
+        emailDetails.setSubject("TEST");
+        emailService.sendSimpleMail(emailDetails);
+
         return jsonResponses.ReturnOkData(new UserResponse(AuthUtils.getUserAuthenticated()), StringConsts.Done);
     }
 
@@ -52,7 +64,8 @@ public class UserControllerV1 {
         return jsonResponses.ReturnOkMessage("Usuario eliminado");
     }
 
-    @PutMapping(value = { "/", "" }, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = { "/",
+            "" }, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUserDTO updateUserDto) {
 
         userService.updateUser(updateUserDto, AuthUtils.getUserAuthenticated());
