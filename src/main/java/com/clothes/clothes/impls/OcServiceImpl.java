@@ -6,7 +6,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
+import com.clothes.clothes.email.EmailDetails;
+import com.clothes.clothes.email.EmailService;
 import com.clothes.clothes.entities.Cart;
 import com.clothes.clothes.entities.Oc;
 import com.clothes.clothes.entities.OcDetalle;
@@ -27,6 +30,9 @@ public class OcServiceImpl implements OcService{
 
     @Autowired
     OcDetalleRepository ocDetalleRepository;
+
+    @Autowired
+    EmailService emailService;
 
     public Oc saveOc(User user) {
 
@@ -58,6 +64,16 @@ public class OcServiceImpl implements OcService{
         // oc.setOcDetalles(details);
 
         cartRepository.deleteByUser(user);
+
+        EmailDetails emailDetails = new EmailDetails();
+        emailDetails.setRecipient(user.getEmail());
+        emailDetails.setSubject("Orden de compra realizada!");
+
+        Context context = new Context();
+        context.setVariable("name", user.getFullName());
+        context.setVariable("precio", oc.getPrice());
+
+        emailService.sendHTMLEmail(emailDetails, context, "OcEmail");
 
         return oc;
     }

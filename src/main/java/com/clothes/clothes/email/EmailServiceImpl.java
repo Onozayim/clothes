@@ -9,6 +9,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.TemplateEngine;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -20,6 +22,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Value("${spring.mail.username}")
     private String sender;
+
+    @Autowired
+    private TemplateEngine templateEngine;
 
     public String sendSimpleMail(EmailDetails details) {
         try {
@@ -52,14 +57,11 @@ public class EmailServiceImpl implements EmailService {
             mimeMessageHelper.setFrom(sender);
             mimeMessageHelper.setTo(details.getRecipient());
             mimeMessageHelper.setText(details.getMsgBody());
-            mimeMessageHelper.setSubject(
-                    details.getSubject());
+            mimeMessageHelper.setSubject(details.getSubject());
 
-            FileSystemResource file = new FileSystemResource(
-                    new File(details.getAttachment()));
+            FileSystemResource file = new FileSystemResource(new File(details.getAttachment()));
 
-            mimeMessageHelper.addAttachment(
-                    file.getFilename(), file);
+            mimeMessageHelper.addAttachment(file.getFilename(), file);
 
             javaMailSender.send(mimeMessage);
             return "Mail sent Successfully";
@@ -68,6 +70,33 @@ public class EmailServiceImpl implements EmailService {
         // Catch block to handle MessagingException
         catch (MessagingException e) {
 
+            // Display message when exception occurred
+            return "Error while sending mail!!!";
+        }
+    }
+
+    public String sendHTMLEmail(EmailDetails details, Context context, String template) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper;
+
+        try {
+
+            mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+            mimeMessageHelper.setFrom(sender);
+            mimeMessageHelper.setTo(details.getRecipient());
+            mimeMessageHelper.setSubject(details.getSubject());
+
+            String process = templateEngine.process(template, context);
+            System.out.println(process);
+
+            mimeMessageHelper.setText(process, true);
+
+            javaMailSender.send(mimeMessage);
+            return "Mail sent Successfully";
+        }
+
+        // Catch block to handle MessagingException
+        catch (MessagingException e) {
             // Display message when exception occurred
             return "Error while sending mail!!!";
         }

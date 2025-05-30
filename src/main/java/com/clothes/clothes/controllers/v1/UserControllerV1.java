@@ -43,13 +43,6 @@ public class UserControllerV1 {
     // @PreAuthorize("hasAuthority('USER')")
     @GetMapping(value = "/me")
     public ResponseEntity<?> getME() {
-        EmailDetails emailDetails = new EmailDetails();
-        
-        emailDetails.setMsgBody("TEST");
-        emailDetails.setRecipient("camilomdo@gmail.com");
-        emailDetails.setSubject("TEST");
-        emailService.sendSimpleMail(emailDetails);
-
         return jsonResponses.ReturnOkData(new UserResponse(AuthUtils.getUserAuthenticated()), StringConsts.Done);
     }
 
